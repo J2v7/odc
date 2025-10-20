@@ -1,0 +1,148 @@
+/* Reset and base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Header */
+.navbar {
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 50px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 35px;
+  height: 35px;
+}
+
+.title {
+  font-size: 800;
+  font-weight: 700;
+  color: #222;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #16a34a; /* green hover effect */
+}
+
+.auth-buttons .btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.login {
+  background-color: transparent;
+  color: #16a34a;
+  border: 2px solid #16a34a;
+}
+
+.login:hover {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.signup {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.signup:hover {
+  background-color: #0e8f3d;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 50px;
+  gap: 50px;
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 550px;
+}
+
+.hero-text h2 {
+  font-size: 3.5rem;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+.hero-text h3 {
+  font-size: 3.5rem;
+  color: #035711;
+  margin-bottom: 20px;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.readmore-btn {
+  background-color: #16a34a;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.readmore-btn:hover {
+  background-color: #0e8f3d;
+}
+
+.hero-image {
+  flex: 1;
+  text-align: right;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+}
