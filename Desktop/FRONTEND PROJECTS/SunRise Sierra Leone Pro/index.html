@@ -1,56 +1,130 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SunRise Sierra Leone</title>
+  <meta name="description" content="SunRise Sierra Leone — Spreading hope, supporting communities, transforming lives." />
   <link rel="stylesheet" href="style.css">
-  <title>Project SunRise Sierra Leone</title>
 </head>
 <body>
-
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
-    <div class="logo-section">
-      <img src="icon/logo1.png" alt="Logo">
-      <h2>Project SunRise Sierra Leone</h2>
-    </div>
-
-    <div class="nav-links">
-      <a href="#">Home</a>
-      <div class="dropdown">
-        <button class="dropbtn">Service ▼</button>
-        <div class="dropdown-content">
-          <a href="#">Web Design</a>
-          <a href="#">App Development</a>
-          <a href="#">Marketing</a>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">SS</div>
+        <div>
+          <h1>SunRise Sierra Leone</h1>
+          <div style="font-size:12px;color:#556573">Spreading hope. Restoring dignity.</div>
         </div>
       </div>
-      <a href="#">Feature</a>
-      <a href="#">Product</a>
-      <a href="#">Testimonial</a>
-      <a href="#">FAQ</a>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#programs">Programs</a></li>
+          <li><a href="#get-involved">Get Involved</a></li>
+          <li><a href="#stories">Stories</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="cta">
+        <button class="btn btn-outline">Log in</button>
+        <button class="btn btn-donate">Donate</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="hero">
+      <div class="hero-left">
+        <span class="kicker">Community • Greener Energy • Education</span>
+        <h2>SunRise Sierra Leone — Lighting the way for brighter communities</h2>
+        <p class="lead">We partner with local leaders to deliver sustainable programs in education, health, and livelihoods so every family wakes up to new hope. Join our movement to rebuild lives with dignity.</p>
+        <div class="hero-actions">
+          <a class="btn btn-donate" href="#get-involved">Join / Volunteer</a>
+          <a class="btn btn-outline" href="#programs">Our Programs</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="carousel" id="carousel">
+          <img src="icon/Image.png" alt="Children smiling at sunrise">
+        </div>
+      </div>
     </div>
 
-    <div class="auth-buttons">
-      <a href="#">Login</a>
-      <a href="#">Sign Up</a>
+    <div class="impact-section">
+      <div class="impact-left">
+        <h2>Helping a local <br>Reinvest itself</h2>
+        <p>Through collaboration, training, and innovation, SunRise Sierra Leone empowers local communities to become self-sufficient. Every initiative we support fuels a ripple of positive change across generations.</p>
+      </div>
+      <div class="impact-right">
+        <div class="impact-card">
+          <h3>197,291</h3>
+          <p>Bookings</p>
+        </div>
+        <div class="impact-card">
+          <h3>197,291</h3>
+          <p>Team</p>
+        </div>
+        <div class="impact-card">
+          <h3>197,291</h3>
+          <p>Payment</p>
+        </div>
+        <div class="impact-card">
+          <h3>197,291</h3>
+          <p>Event Bookings</p>
+        </div>
+      </div>
     </div>
-  </nav>
 
-  <!-- ===== HOME SECTION ===== -->
-  <section class="home">
-    <div class="home-text">
-      <h1>Welcome to John Tua Foundation</h1>
-      <p>
-       The John Tua Foundation recognizes that addressing climate change and energy poverty must go hand-in-hand. Through this project, we aim to promote clean, affordable solar energy and community climate resilience across Sierra Leone — empowering youths, schools, households, and local institutions to take action for a sustainable future.
-      </p>
-      <a href="#" class="readmore">Register</a>
-    </div>
-
-    <div class="home-image">
-      <img src="icon/PROJECT SUNRISE.png" alt="Home Illustration">
-    </div>
-  </section>
-
+<!-- Table Section Two-->
+ <section class="table-section two">
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>Names</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Checking</th>
+        <th>Bookings</th>
+      </tr>
+      <tr>
+        <td>John Tuah</td>
+        <td>johntuah@yahoo.com</td>
+        <td>+23276375269</td>
+        <td>1,000</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>John Tuah</td>
+        <td>johntuah@yahoo.com</td>
+        <td>+23276375269</td>
+        <td>1,000</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>John Tuah</td>
+        <td>johntuah@yahoo.com</td>
+        <td>+23276375269</td>
+        <td>1,000</td>
+        <td>2025</td>
+      </tr>
+      <tr>
+        <td>John Tuah</td>
+        <td>johntuah@yahoo.com</td>
+        <td>+23276375269</td>
+        <td>1,000</td>
+        <td>2025</td>
+      </tr>
+    </table>
+    </section>
+  </main>
+  <script>
+    (function(){
+      const images = [
+       icon/Image.png
+      ];
+      let i=0; const imgEl=document.querySelector('#carousel img');
+      setInterval(()=>{ i=(i+1)%images.length; imgEl.src = images[i]; }, 4200);
+    })();
+  </script>
 </body>
 </html>
