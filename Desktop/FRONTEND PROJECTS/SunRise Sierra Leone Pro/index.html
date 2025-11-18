@@ -1,189 +1,770 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CoolLife Energy Sierra Leone — Solar Cold Storage & Ice</title>
-  <meta name="description" content="Solar-powered cold storage and ice production for markets, fishers, restaurants and farmers in Sierra Leone." />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AgriSmart Hub</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="nav">
-    <div class="brand">
-      <div class="logo">CLE</div>
-      <div>
-        <h1>CoolLife Energy</h1>
-        <div style="font-size:12px;color:var(--muted)">Solar Cold Storage & Ice — Sierra Leone</div>
+
+<nav>
+  <div class="logo">AgriSmart Hub</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#produce">Produce</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header>
+  <div class="wrap">
+    <h1>AgriSmart Hub</h1>
+    <p>Empowering Farmers, Feeding Nations</p>
+    <div class="hero-buttons">
+      <a href="#contact">Join as a Farmer</a>
+      <a href="#produce">Buy Fresh Produce</a>
+    </div>
+  </div>
+</header>
+
+<!-- 🌾 AGRISMART HUB — COMPACT IMPACT SUMMARY -->
+<section id="impact-summary" style="background: linear-gradient(90deg, #0a2a43, #004d00); color: white; text-align: center; padding: 70px 20px;">
+  <h2 style="color: gold; font-size: 2rem; margin-bottom: 40px; opacity: 0; transform: translateY(30px); transition: all 1s;" id="impact-summary-title">
+    🌍 Our Impact at a Glance
+  </h2>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto;">
+    
+    <div class="summary-card">
+      <div class="summary-icon">👨🏾‍🌾</div>
+      <h3 class="summary-counter" data-target="250">0</h3>
+      <p>Farmers Empowered</p>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon">🏘️</div>
+      <h3 class="summary-counter" data-target="15">0</h3>
+      <p>Communities Served</p>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon">🚚</div>
+      <h3 class="summary-counter" data-target="1200">0</h3>
+      <p>Deliveries Completed</p>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon">🌿</div>
+      <h3 class="summary-counter" data-target="2.5">0</h3>
+      <p>Carbon Tons Saved</p>
+    </div>
+  </div>
+</section>
+
+<!-- 🗺️ AGRISMART IMPACT MAP WITH IMPACT SUMMARY COUNTER -->
+<section id="impact-map" style="background: #0a2a43; padding: 80px 20px; text-align: center; color: white;">
+  <h2 style="font-size: 2.5rem; color: gold; margin-bottom: 15px; opacity: 0; transform: translateY(30px); transition: all 1s;" id="map-title">
+    🌍 Our Impact Across Sierra Leone
+  </h2>
+  <p style="color: #cfe6cf; margin-bottom: 35px;">Explore how AgriSmart is empowering farmers, strengthening communities, and building a sustainable future.</p>
+
+  <!-- 🌿 Impact Summary Counter -->
+  <div id="impact-summary" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-bottom: 40px;">
+    <div class="impact-card">
+      <span class="impact-icon">👩🏾‍🌾</span>
+      <h3 class="counter" data-target="25">0</h3>
+      <p>Verified Farmers</p>
+    </div>
+    <div class="impact-card">
+      <span class="impact-icon">🏠</span>
+      <h3 class="counter" data-target="10">0</h3>
+      <p>Community Hubs</p>
+    </div>
+    <div class="impact-card">
+      <span class="impact-icon">🌍</span>
+      <h3 class="counter" data-target="8">0</h3>
+      <p>Project Sites</p>
+    </div>
+  </div>
+
+  <!-- 🌿 Filter Buttons -->
+  <div id="filter-buttons" style="margin-bottom: 20px;">
+    <button class="filter-btn active" data-type="All">All</button>
+    <button class="filter-btn" data-type="Farmer">Farmers</button>
+    <button class="filter-btn" data-type="Community Hub">Community Hubs</button>
+    <button class="filter-btn" data-type="Project Site">Project Sites</button>
+  </div>
+
+  <div id="map" style="height: 450px; max-width: 1000px; margin: 0 auto; border-radius: 15px; overflow: hidden; border: 3px solid gold;"></div>
+</section>
+
+<!-- ✅ Leaflet.js -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  // 🌟 Fade-in title animation
+  const mapTitle = document.getElementById("map-title");
+  window.addEventListener("scroll", () => {
+    const pos = mapTitle.getBoundingClientRect().top;
+    if (pos < window.innerHeight - 100) {
+      mapTitle.style.opacity = "1";
+      mapTitle.style.transform = "translateY(0)";
+    }
+  });
+
+  // 🌟 Counter animation
+  const counters = document.querySelectorAll('.counter');
+  let counterStarted = false;
+
+  function startCounter() {
+    if (counterStarted) return;
+    counterStarted = true;
+    counters.forEach(counter => {
+      const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / 100;
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(updateCount, 30);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      updateCount();
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    const summary = document.getElementById('impact-summary');
+    const pos = summary.getBoundingClientRect().top;
+    if (pos < window.innerHeight - 100) startCounter();
+  });
+
+  // 🗺️ Initialize Leaflet map
+  const map = L.map("map").setView([8.4606, -11.7799], 7);
+  L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+    attribution: '&copy; AgriSmart Impact Map'
+  }).addTo(map);
+
+  // 🌾 Sample Data
+  const impactPoints = [
+    { coords: [8.4844, -13.2280], type: "Farmer", name: "Mariatu Kamara", location: "Freetown", produce: "Tomatoes", status: "✅ Verified" },
+    { coords: [8.558, -12.516], type: "Community Hub", name: "Bo Agri Center", location: "Bo District", produce: "Mangoes", status: "✅ Verified" },
+    { coords: [9.053, -11.742], type: "Project Site", name: "Koinadugu Green Village", location: "Koinadugu", produce: "Tree Planting", status: "✅ Verified" },
+    { coords: [7.875, -11.190], type: "Farmer", name: "John Conteh", location: "Kenema", produce: "Pepper", status: "✅ Verified" },
+    { coords: [8.320, -12.950], type: "Community Hub", name: "Moyamba Growers", location: "Moyamba", produce: "Rice", status: "✅ Verified" }
+  ];
+
+  let allMarkers = [];
+  function addMarkers(filterType = "All") {
+    allMarkers.forEach(m => map.removeLayer(m));
+    allMarkers = [];
+
+    impactPoints.forEach(point => {
+      if (filterType !== "All" && point.type !== filterType) return;
+      let emoji = point.type === "Farmer" ? "👩🏾‍🌾" : point.type === "Community Hub" ? "🏠" : "🌍";
+      const marker = L.marker(point.coords).addTo(map);
+      marker.bindPopup(`
+        <b>${emoji} ${point.name}</b><br>
+        <strong>${point.type}</strong><br>
+        📍 ${point.location}<br>
+        🥬 ${point.produce}<br>
+        <span style="color:green;">${point.status}</span>
+      `);
+      allMarkers.push(marker);
+    });
+  }
+
+  addMarkers("All");
+
+  // 🧭 Filter button logic
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const type = btn.getAttribute("data-type");
+      addMarkers(type);
+    });
+  });
+</script>
+
+<script>
+  // 🟢 Fade in title
+  const summaryTitle = document.getElementById("impact-summary-title");
+  window.addEventListener("scroll", () => {
+    const pos = summaryTitle.getBoundingClientRect().top;
+    if (pos < window.innerHeight - 100) {
+      summaryTitle.style.opacity = "1";
+      summaryTitle.style.transform = "translateY(0)";
+    }
+  });
+
+  // 🌟 Counter animation
+  const counters = document.querySelectorAll(".summary-counter");
+  let started = false;
+
+  function animateSummaryCounters() {
+    counters.forEach(counter => {
+      const target = +counter.getAttribute("data-target");
+      const increment = target / 100;
+      let count = 0;
+      const update = setInterval(() => {
+        count += increment;
+        if (count < target) {
+          counter.textContent = Math.floor(count);
+        } else {
+          counter.textContent = target;
+          clearInterval(update);
+        }
+      }, 20);
+    });
+  }
+
+  window.addEventListener("scroll", () => {
+    const section = document.getElementById("impact-summary");
+    const position = section.getBoundingClientRect().top;
+    if (!started && position < window.innerHeight - 100) {
+      started = true;
+      animateSummaryCounters();
+    }
+  });
+</script>
+
+<section id="about">
+  <div class="container about">
+    <h2>About AgriSmart Hub</h2>
+    <p>AgriSmart Hub connects smallholder farmers to buyers, finance, and technology solutions to empower farmers, reduce waste, and ensure fresh produce reaches markets efficiently.</p>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <h2>Our Services</h2>
+    <div class="services">
+      <div class="service"><img src="https://via.placeholder.com/80"><h3>Marketplace</h3><p class="muted">Connect farmers and buyers for fair prices.</p></div>
+      <div class="service"><img src="https://via.placeholder.com/80"><h3>Smart Hubs</h3><p class="muted">Storage, logistics & equipment rental.</p></div>
+      <div class="service"><img src="https://via.placeholder.com/80"><h3>Agri-Tech</h3><p class="muted">Crop monitoring, weather alerts, insights.</p></div>
+      <div class="service"><img src="https://via.placeholder.com/80"><h3>Finance</h3><p class="muted">Microloans & crop insurance.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="produce">
+  <div class="container">
+    <h2>Fresh Produce Available</h2>
+    <div class="produce" id="produceList">
+      <!-- Produce items injected by JS -->
+    </div>
+
+    <!-- Recent purchases directly below produce -->
+    <div class="recent-wrap" id="recentWrap">
+      <h3 class="recent-title" id="recentTitle">Recent Purchases</h3>
+      <div class="recent-list" id="recentList">
+        <!-- recent purchase cards injected by JS -->
       </div>
     </div>
-    <nav class="nav-links">
-      <a href="#how">How it Works</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#impact">Impact</a>
-      <a class="btn" href="#contact">Get Started</a>
-    </nav>
-  </header>
+  </div>
+</section>
 
-  <main>
-    <section class="hero">
-      <div>
-        <div class="eyebrow">Clean • Reliable • Affordable</div>
-        <h2>Solar-powered cold storage that keeps food fresh and businesses thriving.</h2>
-        <p>CoolLife Energy provides off-grid cold rooms, ice production, and refrigerated delivery to fisherfolk, farmers, restaurants and market traders across Sierra Leone.</p>
-        <div class="cta-row">
-          <a class="btn" href="#contact">Request a Demo</a>
-          <a href="#pricing" style="padding:10px 14px;border-radius:10px;background:transparent;border:2px solid var(--accent);text-decoration:none;color:var(--accent);font-weight:700">See Pricing</a>
-        </div>
-
-        <div style="margin-top:28px;display:flex;gap:12px;align-items:center">
-          <div class="card-hero">
-            <div class="stat"><div style="font-size:22px;color:var(--accent);font-weight:800">100+</div><div style="color:var(--muted)">Customers served</div></div>
-          </div>
-          <div class="card-hero">
-            <div class="stat"><div style="font-size:22px;color:var(--accent);font-weight:800">30%+</div><div style="color:var(--muted)">Less spoilage</div></div>
-          </div>
-        </div>
+<!-- NEW: Impact Counters (after Fresh Produce) -->
+<section id="impact">
+  <div class="container">
+    <h2>Our Achievements</h2>
+    <div class="impact-grid" id="impactGrid">
+      <div class="impact-box">
+        <div class="impact-icon">👩🏽‍🌾</div>
+        <h3 class="impact-counter" data-target="250">0</h3>
+        <p class="muted">Farmers Empowered</p>
       </div>
-
-      <aside>
-        <div style="background:linear-gradient(180deg,#9af37f, #47d82a);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(2,6,23,0.05)">
-          <!-- illustrative SVG representing cold storage + sun -->
-          <svg width="100%" height="230" viewBox="0 0 600 360" xmlns="icon/file_00000000073c61f49a93027d2ac4c59b.png" role="img" aria-label="SunChill illustration">
-            <defs>
-              <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#f6b93b"/><stop offset="1" stop-color="#0b6e4f"/></linearGradient>
-            </defs>
-            <rect x="20" y="60" width="480" height="220" rx="18" fill="#e8fbf2" stroke="#cfeee4" />
-            <rect x="44" y="92" width="140" height="120" rx="10" fill="#ffffff" />
-            <rect x="200" y="92" width="140" height="120" rx="10" fill="#ffffff" />
-            <rect x="356" y="92" width="120" height="120" rx="10" fill="#ffffff" />
-            <circle cx="520" cy="60" r="40" fill="url(#g1)" opacity="0.95" />
-            <text x="60" y="140" font-size="18" fill="#0b6e4f" font-weight="700">Solar Cold Room</text>
-            <text x="210" y="140" font-size="18" fill="#0b6e4f" font-weight="700">Ice Production</text>
-            <text x="370" y="140" font-size="18" fill="#0b6e4f" font-weight="700">Last-mile Delivery</text>
-          </svg>
-        </div>
-      </aside>
-    </section>
-
-    <section class="features" aria-label="Key benefits">
-      <div class="feature">
-        <h3>Off-grid Cold Rooms</h3>
-        <p style="color:var(--muted)">Reliable refrigeration using solar PV + battery systems. No diesel, low running costs, continuous operation.</p>
+      <div class="impact-box">
+        <div class="impact-icon">🌍</div>
+        <h3 class="impact-counter" data-target="15">0</h3>
+        <p class="muted">Communities Served</p>
       </div>
-      <div class="feature">
-        <h3>Ice Production</h3>
-        <p style="color:var(--muted)">Daily production of ice blocks and bags to preserve fish, drinks and perishables — available wholesale and retail.</p>
+      <div class="impact-box">
+        <div class="impact-icon">💼</div>
+        <h3 class="impact-counter" data-target="1200">0</h3>
+        <p class="muted">Successful Deliveries</p>
       </div>
-      <div class="feature">
-        <h3>Refrigerated Delivery</h3>
-        <p style="color:var(--muted)">Insulated tricycles and vans for cold transport — connecting producers to markets while keeping goods fresh.</p>
-      </div>
-    </section>
-
-    <section id="how" class="how">
-      <div style="flex:1">
-        <h3>How it Works</h3>
-        <div class="steps">
-          <div class="step"><strong>1. Book a unit</strong><div style="color:var(--muted)">Reserve cold room space or ice delivery via WhatsApp, phone or the contact form.</div></div>
-          <div class="step"><strong>2. Store or produce</strong><div style="color:var(--muted)">We receive goods, store them in temperature-controlled rooms, or produce ice on demand.</div></div>
-          <div class="step"><strong>3. Deliver or collect</strong><div style="color:var(--muted)">Customers pick up or request refrigerated delivery to market stalls, shops, events.</div></div>
-        </div>
-      </div>
-      <div style="width:420px">
-        <div style="background:var(--card);padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.04)">
-          <h4 style="margin:0 0 6px">Quick Facts</h4>
-          <ul style="color:var(--muted);padding-left:18px;margin:6px 0 0">
-            <li>Solar-powered: dramatic savings vs diesel</li>
-            <li>Secure: monitored cold rooms with 24/7 access controls</li>
-            <li>Flexible plans: hourly, daily or monthly storage</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing" class="pricing">
-      <h3 style="padding-left:6vw">Pricing & Plans</h3>
-      <div class="plans" style="padding:12px 6vw 32px">
-        <div class="plan">
-          <h4>Starter</h4>
-          <div class="price">Le 50 / kg / day</div>
-          <p style="color:var(--muted)">For small traders and farmers — pay-as-you-store.</p>
-          <div style="margin-top:14px"><a class="btn" href="#contact">Choose</a></div>
-        </div>
-        <div class="plan">
-          <h4>Business</h4>
-          <div class="price">Le 45 / kg / day</div>
-          <p style="color:var(--muted)">Monthly contracts for restaurants, hotels and wholesalers.</p>
-          <div style="margin-top:14px"><a class="btn" href="#contact">Choose</a></div>
-        </div>
-        <div class="plan">
-          <h4>Ice & Delivery</h4>
-          <div class="price">Le 15 / block</div>
-          <p style="color:var(--muted)">Ice production and refrigerated delivery bundles for markets & events.</p>
-          <div style="margin-top:14px"><a class="btn" href="#contact">Choose</a></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="impact" style="padding:36px 6vw">
-      <h3>Social & Environmental Impact</h3>
-      <p style="color:var(--muted);max-width:760px">By replacing diesel-powered cold rooms and reducing spoilage we lower emissions, increase incomes for fishers and farmers, and improve food security across communities. SunChill also provides technical training and local jobs to maintain the cold chain.</p>
-
-      <div style="display:flex;gap:18px;margin-top:18px;flex-wrap:wrap">
-        <div style="background:var(--card);padding:18px;border-radius:12px;flex:1;min-width:220px">
-          <strong>Jobs Created</strong>
-          <p style="color:var(--muted);margin:8px 0 0">Technicians, drivers and operational staff.</p>
-        </div>
-        <div style="background:var(--card);padding:18px;border-radius:12px;flex:1;min-width:220px">
-          <strong>Reduced Waste</strong>
-          <p style="color:var(--muted);margin:8px 0 0">Lower post-harvest loss for perishable goods.</p>
-        </div>
-        <div style="background:var(--card);padding:18px;border-radius:12px;flex:1;min-width:220px">
-          <strong>Lower Costs</strong>
-          <p style="color:var(--muted);margin:8px 0 0">Cheaper than running diesel generators long-term.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="contact">
-      <div style="padding:8px 6vw">
-        <h3>Get Started — Request a Demo or Investment Pack</h3>
-        <div class="contact-grid">
-          <div>
-            <p style="color:var(--muted)">Send us a message and our team will contact you within 48 hours with pilot details, pricing and the investor pitch deck.</p>
-            <div style="display:flex;gap:12px;margin-top:12px">
-              <div style="background:var(--card);padding:12px;border-radius:10px;min-width:180px">
-                <strong>WhatsApp</strong>
-                <div style="color:var(--muted);font-size:14px">+232 76 375269</div>
-              </div>
-              <div style="background:var(--card);padding:12px;border-radius:10px;min-width:180px">
-                <strong>Email</strong>
-                <div style="color:var(--muted);font-size:14px">johntuah@yahoo.com</div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <form action="#" onsubmit="alert('Thanks — demo request recorded (this is a prototype).');return false;">
-              <input type="text" placeholder="Your name" required />
-              <input type="email" placeholder="Email address" required />
-              <input type="text" placeholder="Phone or WhatsApp number" required />
-              <textarea rows="4" placeholder="Tell us about your needs (storage, ice, delivery)"></textarea>
-              <button class="btn" style="width:100%" type="submit">Request Demo</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-      <div>© <strong>CoolLife Energy Sierra Leone</strong> — Built for resilient food systems.</div>
-      <div style="color:var(--muted)">Follow us: WhatsApp • Facebook • Instagram</div>
     </div>
-  </footer>
+  </div>
+</section>
 
+<!-- NEW: Farmer Spotlight -->
+<section id="spotlight">
+  <div class="container">
+    <h2>Meet Our Growers</h2>
+    <div class="spotlight" id="spotlightList">
+      <!-- Farmer cards injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- 🌍 AGRISMART IMPACT DASHBOARD SECTION -->
+<section id="impact-dashboard" style="background: linear-gradient(180deg, #0a2a43 0%, #ffffff 100%); padding: 80px 20px; text-align: center; color: #fff; overflow: hidden;">
+  <h2 style="font-size: 2.5rem; color: gold; margin-bottom: 50px; opacity: 0; transform: translateY(30px); transition: all 1s;" id="impact-title">
+    🌿 Our Impact in Numbers
+  </h2>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1200px; margin: 0 auto;">
+    
+    <!-- CARD 1 -->
+    <div class="impact-card">
+      <div class="impact-icon">👨🏾‍🌾</div>
+      <h3>Farmers Empowered</h3>
+      <p class="counter" data-target="250">0</p>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="impact-card">
+      <div class="impact-icon">🏘️</div>
+      <h3>Communities Served</h3>
+      <p class="counter" data-target="15">0</p>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="impact-card">
+      <div class="impact-icon">🚚</div>
+      <h3>Deliveries Completed</h3>
+      <p class="counter" data-target="1200">0</p>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="impact-card">
+      <div class="impact-icon">🌿</div>
+      <h3>Carbon Reduction (Tons)</h3>
+      <p class="counter" data-target="2.5">0</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- 🌍 AGRISMART IMPACT DASHBOARD — CHART VISUAL VERSION -->
+<section id="impact-charts" style="background: linear-gradient(180deg, #ffffff 0%, #0a2a43 100%); padding: 90px 20px; text-align: center; color: #fff;">
+  <h2 style="font-size: 2.5rem; color: gold; margin-bottom: 60px; opacity: 0; transform: translateY(30px); transition: all 1s;" id="impact-chart-title">
+    📊 Our Progress & Achievements
+  </h2>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; max-width: 1200px; margin: 0 auto;">
+    <!-- CHART 1 -->
+    <div class="chart-card" data-percent="90">
+      <svg class="chart" width="160" height="160">
+        <circle class="chart-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="chart-fill" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="chart-text">
+        <h3>Farmer Empowerment</h3>
+        <p>90% Goal Reached</p>
+      </div>
+    </div>
+
+    <!-- CHART 2 -->
+    <div class="chart-card" data-percent="75">
+      <svg class="chart" width="160" height="160">
+        <circle class="chart-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="chart-fill" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="chart-text">
+        <h3>Community Coverage</h3>
+        <p>75% Target Area</p>
+      </div>
+    </div>
+
+    <!-- CHART 3 -->
+    <div class="chart-card" data-percent="85">
+      <svg class="chart" width="160" height="160">
+        <circle class="chart-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="chart-fill" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="chart-text">
+        <h3>Logistics Efficiency</h3>
+        <p>85% On-Time Delivery</p>
+      </div>
+    </div>
+
+    <!-- CHART 4 -->
+    <div class="chart-card" data-percent="65">
+      <svg class="chart" width="160" height="160">
+        <circle class="chart-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="chart-fill" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="chart-text">
+        <h3>Environmental Impact</h3>
+        <p>65% Sustainability Goal</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Fade-in title animation
+  const chartTitle = document.getElementById("impact-chart-title");
+  window.addEventListener("scroll", () => {
+    const pos = chartTitle.getBoundingClientRect().top;
+    if (pos < window.innerHeight - 100) {
+      chartTitle.style.opacity = "1";
+      chartTitle.style.transform = "translateY(0)";
+    }
+  });
+
+  // Chart animation
+  const chartCards = document.querySelectorAll(".chart-card");
+  let chartsAnimated = false;
+
+  function animateCharts() {
+    chartCards.forEach(card => {
+      const percent = card.getAttribute("data-percent");
+      const circle = card.querySelector(".chart-fill");
+      const radius = circle.r.baseVal.value;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+    });
+  }
+
+  window.addEventListener("scroll", () => {
+    const section = document.getElementById("impact-charts");
+    const top = section.getBoundingClientRect().top;
+    if (!chartsAnimated && top < window.innerHeight - 100) {
+      chartsAnimated = true;
+      animateCharts();
+    }
+  });
+</script>
+
+<script>
+  // 🌟 Fade-in animation for title
+  const title = document.getElementById("impact-title");
+  window.addEventListener("scroll", () => {
+    const titleTop = title.getBoundingClientRect().top;
+    if (titleTop < window.innerHeight - 100) {
+      title.style.opacity = "1";
+      title.style.transform = "translateY(0)";
+    }
+  });
+
+  // 🔢 Counter animation
+  const counters = document.querySelectorAll('.counter');
+  let started = false;
+
+  function animateCounters() {
+    counters.forEach(counter => {
+      const target = +counter.getAttribute('data-target');
+      const increment = target / 200;
+
+      const updateCount = () => {
+        const value = +counter.innerText;
+        if (value < target) {
+          counter.innerText = Math.min((value + increment).toFixed(1), target);
+          setTimeout(updateCount, 20);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      updateCount();
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    const section = document.getElementById('impact-dashboard');
+    const sectionTop = section.getBoundingClientRect().top;
+    if (!started && sectionTop < window.innerHeight - 100) {
+      started = true;
+      animateCounters();
+    }
+  });
+</script
+
+<section id="team">
+  <div class="container">
+    <h2>Meet Our Team</h2>
+    <div class="team">
+      <div class="member"><img src="icon/MYXJ_-Picsart-BackgroundRemover.jpg"><h4>CEO</h4><p class="muted">Agribusiness & Operations</p></div>
+      <div class="member"><img src="icon/20240413_180608-Photoroom.png"><h4>CTO</h4><p class="muted">Tech & Data</p></div>
+      <div class="member"><img src="icon/farmers market.png"><h4>COO</h4><p class="muted">Logistics & Hubs</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2>Contact Us</h2>
+    <form class="contact-form" onsubmit="event.preventDefault();alert('Thanks — we will be in touch!')">
+      <input placeholder="Your Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <textarea placeholder="Message" rows="4" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>Contact: jvenisetuah@gmail.com</p>
+  <p><a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">LinkedIn</a> | <a href="#">TikTok</a></p>
+  <p>&copy; 2025 AgriSmart Hub. All rights reserved.</p>
+</footer>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h3 id="modalTitle">Buy Produce</h3>
+    <div id="modalContent">
+      <div class="field"><label>Product</label><input id="mProduct" readonly></div>
+      <div class="field"><label>Price (per unit)</label><input id="mPrice" readonly></div>
+      <div class="field"><label>Full Name</label><input id="mName" required></div>
+      <div class="field"><label>Mobile Number</label><input id="mMobile" placeholder="+232..." required></div>
+      <div class="field"><label>Quantity</label><input id="mQty" type="number" min="1" value="1" required></div>
+      <div class="field"><label>Payment Method</label>
+        <select id="mPay">
+          <option>Orange Money</option>
+          <option>AfriMoney</option>
+          <option>QMoney</option>
+          <option>Bank Transfer</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="modalStatus" style="margin-top:12px;color:#333;font-weight:700"></div>
+    <div class="modal-actions">
+      <button class="btn secondary" id="modalCancel">Cancel</button>
+      <button class="btn primary" id="modalConfirm">Confirm Purchase</button>
+    </div>
+  </div>
+</div>
+
+<!-- WhatsApp floating button -->
+<div class="whatsapp-btn" id="whatsappBtn" title="Chat on WhatsApp">
+  <div class="pulse"></div>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M20.52 3.48A11.94 11.94 0 0012 0C5.373 0 .001 5.373 0 12c0 2.118.555 4.17 1.607 5.992L0 24l6.344-1.62A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12 0-3.2-1.247-6.201-3.48-8.52z" fill="#fff" opacity=".06"></path>
+    <path d="M20.52 3.48A11.94 11.94 0 0012 0C5.373 0 .001 5.373 0 12c0 2.118.555 4.17 1.607 5.992L0 24l6.344-1.62A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12 0-3.2-1.247-6.201-3.48-8.52z" fill="none"></path>
+    <path d="M17.472 14.382l-1.122.53a.954.954 0 00-.422.95c.055.44.292 1.653-1.344 2.704-1.636 1.05-3.02.765-4.137.295-1.12-.47-3.399-1.556-5.011-3.168C2.47 14.6 2.29 10.98 3.86 8.726 5.432 6.472 8.27 5.09 11.296 5.09c3.025 0 4.85 1.09 6.04 2.38 1.19 1.291 1.608 3.084 1.336 4.912-.13.86-.516 1.67-1.2 2.0z" fill="#fff"></path>
+  </svg>
+</div>
+
+<script>
+// -------------------------------
+// Data: produce list (example prices in Le)
+// -------------------------------
+const produceData = [
+  {id:'p1',name:'Tomatoes',price:60000,unit:'basket',img:'icon/seed tomatoe.png',available:true},
+  {id:'p2',name:'Cassava',price:40000,unit:'bag',img:'icon/cassava.png',available:true},
+  {id:'p3',name:'Carrots',price:32000,unit:'bag',img:'icon/carrots-4922948_1920.jpg',available:true},
+  {id:'p4',name:'Potatoes',price:40000,unit:'bag',img:'icon/potatoes.png',available:true},
+  {id:'p5',name:'Plantains',price:48000,unit:'bunch',img:'icon/banana-321853_1920.jpg',available:false},
+  {id:'p6',name:'Rice',price:40000,unit:'bag',img:'icon/rice-893731_1920.jpg',available:false},
+  {id:'p7',name:'Onions',price:45000,unit:'bag',img:'icon/Onion unch.png',available:true},
+  {id:'p8',name:'Peppers',price:32000,unit:'basket',img:'icon/cayenne-peppers-2779828_1920.jpg',available:true},
+  {id:'p9',name:'Cucumber',price:20000,unit:'bag',img:'icon/cucumbers-849269_1920.jpg',available:false},
+  {id:'p10',name:'Okra',price:1000,unit:'bag',img:'icon/okra-4915051_1920.jpg',available:true},
+  {id:'p11',name:'Sweet-Potato',price:2000,unit:'bag',img:'icon/sweet-potato-1615024_1280.jpg',available:true},
+  {id:'p12',name:'Cabbage',price:40000,unit:'bag',img:'icon/cabbage-3722517_1920.jpg',available:true},
+  {id:'p13',name:'Shrimps',price:32000,unit:'basket',img:'icon/shrimps.png',available:true},
+  {id:'p14',name:'Fish',price:5000,unit:'carton',img:'icon/tilapia-7423045_1920.jpg',available:false},
+  {id:'p15',name:'Mangoes',price:3000,unit:'bag',img:'icon/mango tree.png',available:true},
+  {id:'p16',name:'Red Onions',price:15000,unit:'bag',img:'icon/Red Onions.jpg',available:true},
+];
+
+// Farmer spotlight data
+const farmers = [
+  {name:'Aminata Koroma',location:'Bo District',story:'“AgriSmart helps me sell my crops directly to buyers and earn more income for my family.”',img:'https://via.placeholder.com/600x400?text=Aminata'},
+  {name:'Sahr Conteh',location:'Kenema',story:'“With storage at the hub I no longer lose crops to spoilage during rainy seasons.”',img:'https://via.placeholder.com/600x400?text=Sahr'},
+  {name:'Fatmata Sesay',location:'Freetown outskirts',story:'“I received a small loan and purchased seedlings — now my yield is higher.”',img:'https://via.placeholder.com/600x400?text=Fatmata'}
+];
+
+// render produce
+const produceList = document.getElementById('produceList');
+produceData.forEach(item=>{
+  const div = document.createElement('div');
+  div.className='produce-item';
+  div.innerHTML = `
+    <img src="${item.img}" alt="${item.name}">
+    <h3>${item.name}</h3>
+    <p class="muted">Price: Le ${item.price.toLocaleString()} per ${item.unit}</p>
+    <div>
+      <span class="badge ${item.available? 'available':'unavailable'}">${item.available? 'Available':'Not Available'}</span>
+    </div>
+    <div>
+      <button class="buy-btn" ${item.available? '':'disabled'} data-id="${item.id}">${item.available? 'Buy Now':'Unavailable'}</button>
+    </div>
+  `;
+  produceList.appendChild(div);
+});
+
+// render farmer spotlight
+const spotlightList = document.getElementById('spotlightList');
+farmers.forEach(f=>{
+  const c = document.createElement('div');
+  c.className='farmer-card';
+  c.innerHTML = `
+    <img src="${f.img}" alt="${f.name}">
+    <h4>${f.name}</h4>
+    <p class="muted">${f.location}</p>
+    <p style="margin-top:8px;font-style:italic;color:#333">${f.story}</p>
+  `;
+  spotlightList.appendChild(c);
+});
+
+// -------------------------------
+// Modal logic
+// -------------------------------
+const modalBackdrop = document.getElementById('modalBackdrop');
+const mProduct = document.getElementById('mProduct');
+const mPrice = document.getElementById('mPrice');
+const mName = document.getElementById('mName');
+const mMobile = document.getElementById('mMobile');
+const mQty = document.getElementById('mQty');
+const mPay = document.getElementById('mPay');
+const modalConfirm = document.getElementById('modalConfirm');
+const modalCancel = document.getElementById('modalCancel');
+const modalStatus = document.getElementById('modalStatus');
+
+let activeItem = null;
+
+function openModalFor(id){
+  const item = produceData.find(p=>p.id===id);
+  if(!item) return;
+  activeItem = item;
+  mProduct.value = item.name;
+  mPrice.value = `Le ${item.price.toLocaleString()}`;
+  mName.value=''; mMobile.value=''; mQty.value=1; mPay.value='Orange Money';
+  modalStatus.textContent='';
+  modalBackdrop.style.display='flex';
+  setTimeout(()=>mName.focus(),120);
+}
+
+function closeModal(){
+  modalBackdrop.style.display='none';
+}
+
+// attach buttons
+document.querySelectorAll('.buy-btn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    const id = btn.getAttribute('data-id');
+    openModalFor(id);
+  });
+});
+
+modalCancel.addEventListener('click',closeModal);
+
+// small ding sound using WebAudio
+function playDing(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type='sine'; o.frequency.value=880; // A5
+    g.gain.value=0.0001;
+    o.connect(g); g.connect(ctx.destination);
+    g.gain.linearRampToValueAtTime(0.03, ctx.currentTime+0.01);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime+0.25);
+    setTimeout(()=>{ o.stop(); ctx.close(); },300);
+  }catch(e){/*ignore*/}
+}
+
+// Recent purchases store (in-memory)
+let recent = [];
+const recentList = document.getElementById('recentList');
+
+function renderRecent(){
+  recentList.innerHTML='';
+  recent.slice(0,5).forEach((r,idx)=>{
+    const card = document.createElement('div');
+    card.className='purchase-card';
+    card.innerHTML = `
+      <div class="purchase-row"><div><strong>${r.buyer}</strong> <div class="muted">${r.mobile}</div></div>
+      <div class="muted">${r.method}</div></div>
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+        <div><strong>${r.qty} x ${r.product}</strong><div class="muted">Unit: Le ${r.unitPrice.toLocaleString()}</div></div>
+        <div style="text-align:right"><strong>Le ${r.total.toLocaleString()}</strong><div class="muted">${new Date(r.time).toLocaleString()}</div></div>
+      </div>
+    `;
+    recentList.prepend(card);
+    setTimeout(()=>card.classList.add('visible'),80 + idx*80);
+  });
+}
+
+// modal confirm flow
+modalConfirm.addEventListener('click',async ()=>{
+  const name = mName.value.trim();
+  const mobile = mMobile.value.trim();
+  const qty = parseInt(mQty.value,10) || 1;
+  const method = mPay.value;
+  if(!name || !mobile){ alert('Please enter name and mobile number'); return; }
+  modalStatus.style.color='#555';
+  modalStatus.textContent='Payment pending confirmation...';
+  modalConfirm.disabled = true; modalCancel.disabled = true;
+
+  await new Promise(r=>setTimeout(r,1800)); // 1.8s
+
+  const unitPrice = activeItem.price;
+  const total = unitPrice * qty;
+
+  modalStatus.style.color = 'var(--green)';
+  modalStatus.textContent = `Purchase Successful! You ordered ${qty} ${activeItem.name} for Le ${total.toLocaleString()}.`;
+  playDing();
+
+  const tx = { buyer:name, mobile, product:activeItem.name, qty, unitPrice, total, method, time:Date.now() };
+  recent.unshift(tx);
+  if(recent.length>20) recent = recent.slice(0,20);
+  renderRecent();
+
+  setTimeout(()=>{
+    modalConfirm.disabled = false; modalCancel.disabled = false; modalStatus.textContent=''; closeModal();
+  },2000);
+});
+
+// SECTION ANIMATIONS
+const obsTargets = document.querySelectorAll('section, header h1, header p, .hero-buttons a');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){ en.target.style.opacity=1; en.target.style.transform='translateY(0)'; }
+  });
+},{threshold:0.12});
+obsTargets.forEach(t=>io.observe(t));
+
+// Fade-in title for recent purchases when it enters viewport
+const recentTitle = document.getElementById('recentTitle');
+const recentObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ recentTitle.style.opacity=1; recentTitle.style.transform='none'; } });
+},{threshold:0.2});
+recentObserver.observe(recentTitle);
+
+// Impact counter animation (when in view)
+const impactCounters = document.querySelectorAll('.impact-counter');
+const impactObserver = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el = entry.target;
+      const target = +el.getAttribute('data-target');
+      let count = 0; const step = Math.max(1, Math.floor(target/80));
+      const t = setInterval(()=>{
+        count += step; if(count>=target){ el.innerText = target + (target>=100?'+':''); clearInterval(t); } else { el.innerText = count; }
+      },20);
+      impactObserver.unobserve(el);
+    }
+  });
+},{threshold:0.3});
+impactCounters.forEach(c=>impactObserver.observe(c));
+
+// WhatsApp button (opens chat)
+const whatsappBtn = document.getElementById('whatsappBtn');
+whatsappBtn.addEventListener('click',()=>{
+  const text = encodeURIComponent('Hello AgriSmart Hub 👋, I’d like to order fresh produce or partner with you.');
+  const url = `https://wa.me/?text=${text}`; // generic open
+  window.open(url,'_blank');
+});
+
+// initial render: populate produce items and render empty recent
+renderRecent();
+
+</script>
 </body>
 </html>
