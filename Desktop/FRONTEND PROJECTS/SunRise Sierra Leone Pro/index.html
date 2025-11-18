@@ -118,13 +118,13 @@
   });
 
   // 🌟 Counter animation
-  const counters = document.querySelectorAll('.counter');
+  const mapCounters = document.querySelectorAll('.counter');
   let counterStarted = false;
 
   function startCounter() {
     if (counterStarted) return;
     counterStarted = true;
-    counters.forEach(counter => {
+    mapCounters.forEach(counter => {
       const updateCount = () => {
         const target = +counter.getAttribute('data-target');
         const count = +counter.innerText;
@@ -206,11 +206,11 @@
   });
 
   // 🌟 Counter animation
-  const counters = document.querySelectorAll(".summary-counter");
-  let started = false;
+  const summaryCounters = document.querySelectorAll(".summary-counter");
+  let summaryStarted = false;
 
   function animateSummaryCounters() {
-    counters.forEach(counter => {
+    summaryCounters.forEach(counter => {
       const target = +counter.getAttribute("data-target");
       const increment = target / 100;
       let count = 0;
@@ -229,8 +229,8 @@
   window.addEventListener("scroll", () => {
     const section = document.getElementById("impact-summary");
     const position = section.getBoundingClientRect().top;
-    if (!started && position < window.innerHeight - 100) {
-      started = true;
+    if (!summaryStarted && position < window.innerHeight - 100) {
+      summaryStarted = true;
       animateSummaryCounters();
     }
   });
@@ -450,11 +450,11 @@
   });
 
   // 🔢 Counter animation
-  const counters = document.querySelectorAll('.counter');
-  let started = false;
+  const dashboardCounters = document.querySelectorAll('.counter');
+  let dashboardStarted = false;
 
   function animateCounters() {
-    counters.forEach(counter => {
+    dashboardCounters.forEach(counter => {
       const target = +counter.getAttribute('data-target');
       const increment = target / 200;
 
@@ -474,8 +474,8 @@
   window.addEventListener('scroll', () => {
     const section = document.getElementById('impact-dashboard');
     const sectionTop = section.getBoundingClientRect().top;
-    if (!started && sectionTop < window.innerHeight - 100) {
-      started = true;
+    if (!dashboardStarted && sectionTop < window.innerHeight - 100) {
+      dashboardStarted = true;
       animateCounters();
     }
   });
